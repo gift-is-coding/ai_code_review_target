@@ -36,4 +36,7 @@ if __name__ == "__main__":
     random_float = random.uniform(10, 20)
     print("Random float between 10 and 20:", random_float)
 
+    # Generate a random integer between 50 and 150
+    random_int = random.randint(50, 150)
+    print("Random integer between 50 and 150:", random_int)
 
