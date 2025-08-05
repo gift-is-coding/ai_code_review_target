@@ -31,3 +31,7 @@ if __name__ == "__main__":
     # make a random choice from a list
     choice_list = ['red', 'green', 'blue', 'yellow']
     print("Random choice from colors:", random.choice(choice_list))
+
+    # Generate a random float between 10 and 20
+    random_float = random.uniform(10, 20)
+    print("Random float between 10 and 20:", random_float)
