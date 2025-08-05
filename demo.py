@@ -12,3 +12,13 @@ def print_random_fact():
 
 if __name__ == "__main__":
     print_random_fact()
+
+    # Print a random integer between 1 and 100
+    print("Random integer between 1 and 100:", random.randint(1, 100))
+
+    # Print a random floating point number between 0 and 1
+    print("Random float between 0 and 1:", random.random())
+
+    # Print a random sample of 3 elements from a list
+    sample_list = ['apple', 'banana', 'cherry', 'date', 'elderberry']
+    print("Random sample of 3 fruits:", random.sample(sample_list, 3))
