@@ -26,3 +26,8 @@ if __name__ == "__main__":
     # Shuffle the sample_list and print the result
     random.shuffle(sample_list)
     print("Shuffled list of fruits:", sample_list)
+
+
+    # make a random choice from a list
+    choice_list = ['red', 'green', 'blue', 'yellow']
+    print("Random choice from colors:", random.choice(choice_list))
