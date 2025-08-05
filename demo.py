@@ -22,3 +22,7 @@ if __name__ == "__main__":
     # Print a random sample of 3 elements from a list
     sample_list = ['apple', 'banana', 'cherry', 'date', 'elderberry']
     print("Random sample of 3 fruits:", random.sample(sample_list, 3))
+
+    # Shuffle the sample_list and print the result
+    random.shuffle(sample_list)
+    print("Shuffled list of fruits:", sample_list)
