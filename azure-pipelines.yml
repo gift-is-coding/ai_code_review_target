@@ -1,0 +1,18 @@
+# 目标项目的 azure-pipelines.yml
+trigger:
+  - main
+
+pr:
+  - main
+
+extends:
+  template: https://github.com/gift-is-coding/code-review-with-ai/templates/ai-review.yml
+  parameters:
+    projectName: 'your-target-project-name'
+    standardsFile: 'standards/python_standards.txt'  # 根据技术栈选择
+    codeTypes:
+      - '.py'
+      - '.js'
+      - '.ts'
+    enableWikiUpload: true
+    enableArtifacts: true
