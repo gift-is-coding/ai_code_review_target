@@ -55,9 +55,11 @@ def get_changed_files(pr_only, code_types=None):
                 f'git diff --name-only origin/{base}...origin/{head}',
                 f'git diff --name-only {base}...{head}',
                 f'git diff --name-only HEAD~1',
-                'git diff --name-only HEAD~1..HEAD'
+                'git diff --name-only HEAD~1..HEAD',
+                'git diff --name-only HEAD'  # 如果没有历史记录，使用当前HEAD
             ]
             
+            result = None
             for i, diff_cmd in enumerate(diff_commands):
                 print(f"Debug: 尝试命令 {i+1}: {diff_cmd}")
                 result = subprocess.run(diff_cmd, shell=True, capture_output=True, text=True)
@@ -65,15 +67,33 @@ def get_changed_files(pr_only, code_types=None):
                 print(f"Debug: 命令 {i+1} 输出: {result.stdout}")
                 print(f"Debug: 命令 {i+1} 错误: {result.stderr}")
                 
-                if result.returncode == 0 and result.stdout.strip():
+                if result.returncode == 0:
                     print(f"Debug: 命令 {i+1} 成功，使用此结果")
                     break
         else:
-            # 如果没有 PR 信息，使用最近的提交
-            diff_cmd = 'git diff --name-only HEAD~1'
-            print(f"Debug: 使用最近提交: {diff_cmd}")
-            result = subprocess.run(diff_cmd, shell=True, capture_output=True, text=True)
-            print(f"Debug: 最近提交命令输出: {result.stdout}")
+            # 如果没有 PR 信息，尝试获取所有文件
+            diff_commands = [
+                'git diff --name-only HEAD~1',
+                'git diff --name-only HEAD',
+                'git ls-files'  # 如果没有任何历史，列出所有文件
+            ]
+            
+            result = None
+            for i, diff_cmd in enumerate(diff_commands):
+                print(f"Debug: 尝试命令 {i+1}: {diff_cmd}")
+                result = subprocess.run(diff_cmd, shell=True, capture_output=True, text=True)
+                print(f"Debug: 命令 {i+1} 返回码: {result.returncode}")
+                print(f"Debug: 命令 {i+1} 输出: {result.stdout}")
+                print(f"Debug: 命令 {i+1} 错误: {result.stderr}")
+                
+                if result.returncode == 0:
+                    print(f"Debug: 命令 {i+1} 成功，使用此结果")
+                    break
+        
+        # 确保result不为None
+        if result is None or result.returncode != 0:
+            print("Debug: 所有Git命令都失败了，使用空列表")
+            result = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
         
         files = [f for f in result.stdout.splitlines() if f.strip() and os.path.splitext(f)[1] in code_types]
         print(f"Debug: 找到的变更文件: {files}")
@@ -174,7 +194,8 @@ def build_wiki_url(wiki_url_base, timestamp=None):
     if not wiki_url_base.endswith('/pages'):
         wiki_url_base = wiki_url_base.rstrip('/') + '/pages'
     
-    page_path = f'/AIReview/{timestamp}'
+    # 使用简单的页面路径，避免需要创建父页面
+    page_path = f'AIReview_{timestamp}'
     full_url = f'{wiki_url_base}?path={page_path}&api-version=7.1-preview.1'
     
     print(f"Debug: Wiki URL 构建:")
@@ -266,7 +287,7 @@ def main():
     
     if len(code_files) == 0:
         print("没有找到需要审核的文件，创建空的审核结果...")
-        feedbacks = [("无变更文件", "本次 PR 没有包含需要审核的代码文件。")]
+        feedbacks = [("无变更文件", "本次 PR 没有包含需要审核的代码文件。\n\n可能的原因：\n1. 仓库中没有代码文件\n2. 代码文件类型不在支持的范围内\n3. Git历史记录不足\n\n建议：\n- 检查仓库中是否有代码文件\n- 确认代码文件扩展名是否在支持列表中\n- 如果是新仓库，可以尝试提交一些代码文件")]
     else:
         print("开始调用 Kimi API 进行审核...")
         feedbacks = kimi_review_code(standard, code_files, args.moonshot_api_key, args.moonshot_api_base)
