@@ -6,7 +6,7 @@ pr:
   - main
 
 extends:
-  template: https://github.com/gift-is-coding/code-review-with-ai/templates/ai-review.yml
+  template: https://dev.azure.com/giiift/test-for-HLS/_git/code-review-with-ai?path=templates/ai-review.yml&version=GBmain
   parameters:
     projectName: 'your-target-project-name'
     standardsFile: 'standards/python_standards.txt'  # 根据技术栈选择
