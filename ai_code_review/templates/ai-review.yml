@@ -37,11 +37,11 @@ parameters:
     type: boolean
     default: true
 
-variables:
-  - group: AI_CODE_REVIEW  # 需要在 Azure DevOps 中创建此变量组
-
 pool:
   vmImage: 'ubuntu-latest'
+
+variables:
+  - group: AI_CODE_REVIEW  # 需要在 Azure DevOps 中创建此变量组
 
 steps:
   # Git 配置和调试信息
