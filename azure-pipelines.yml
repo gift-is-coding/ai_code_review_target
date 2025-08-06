@@ -1,0 +1,45 @@
+# Azure DevOps Pipeline - AI 代码审核
+
+trigger:
+  - main
+
+pr:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: AI_CODE_REVIEW
+
+steps:
+  # Python 环境设置
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+
+  # 安装依赖
+  - script: |
+      pip install -r ai_code_review/requirements.txt
+    displayName: 'Install dependencies'
+
+  # 执行代码审核
+  - script: |
+      python ai_code_review/auto_review.py \
+        --project_name "target-project" \
+        --standards "ai_code_review/standards/code_standards.txt" \
+        --code_types .py .js .ts .java .go .cpp .vue .html .css \
+        --moonshot_api_key $(MOONSHOT_API_KEY) \
+        --wiki_url_base $(WIKI_URL_BASE) \
+        --wiki_pat $(WIKI_PAT) \
+        --pr_only
+    displayName: 'AI 代码审核'
+
+  # 发布审核结果
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: 'result'
+      artifactName: 'AI-Review-Results'
+      publishLocation: 'Container'
+    displayName: '发布审核结果'

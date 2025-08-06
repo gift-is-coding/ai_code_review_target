@@ -18,10 +18,7 @@ def get_latest_result_file(result_dir='result'):
 SUPPORTED_EXTS = ['.py', '.js', '.ts', '.jsx', '.tsx', '.java', '.go', '.cpp', '.c', '.cs', '.vue', '.html', '.css', '.json', '.sh']
 
 
-def load_config(config_path='ai_code_review/config.yaml'):
-    if os.path.exists(config_path):
-        with open(config_path, 'r', encoding='utf-8') as f:
-            return yaml.safe_load(f)
+def load_config(config_path=None):
     return {}
 
 
