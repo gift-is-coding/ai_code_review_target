@@ -40,3 +40,7 @@ if __name__ == "__main__":
     random_int = random.randint(50, 150)
     print("Random integer between 50 and 150:", random_int)
 
+    # Generate a random sample of 2 elements from a range of numbers
+    random_sample = random.sample(range(1, 21), 2)
+    print("Random sample of 2 numbers from 1 to 20:", random_sample)
+
