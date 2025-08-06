@@ -72,14 +72,14 @@ steps:
 
   # 安装依赖
   - script: |
-      pip install -r requirements.txt || pip install python-docx pyyaml requests
+      pip install -r ai_code_review/requirements.txt || pip install python-docx pyyaml requests
     displayName: 'Install dependencies'
 
   # 测试 Wiki 连接（如果启用）
   - script: |
       if [ "${{ parameters.enableWikiUpload }}" == "true" ]; then
         echo "=== 测试 Wiki 连接 ==="
-        python test_wiki.py
+        python ai_code_review/test_wiki.py
       else
         echo "Wiki 上传已禁用，跳过连接测试"
       fi
@@ -89,7 +89,7 @@ steps:
   # 执行代码审核
   - script: |
       echo "=== 执行代码审核 ==="
-      python auto_review.py \
+      python ai_code_review/auto_review.py \
         --project_name "${{ parameters.projectName }}" \
         --standards "${{ parameters.standardsFile }}" \
         --code_types ${{ join(parameters.codeTypes, ' ') }} \

@@ -8,10 +8,10 @@ pr:
   - main
 
 extends:
-  template: https://github.com/gift-is-coding/code-review-with-ai/templates/ai-review.yml
+  template: ../../templates/ai-review.yml
   parameters:
     projectName: 'python-project'
-    standardsFile: 'standards/python_standards.txt'
+    standardsFile: '../../standards/python_standards.txt'
     codeTypes:
       - '.py'
       - '.pyx'

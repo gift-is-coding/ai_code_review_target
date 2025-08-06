@@ -9,7 +9,7 @@ import json
 import yaml
 import os
 
-def load_config(config_path='config.yaml'):
+def load_config(config_path='ai_code_review/config.yaml'):
     """加载配置文件"""
     if os.path.exists(config_path):
         with open(config_path, 'r', encoding='utf-8') as f:
